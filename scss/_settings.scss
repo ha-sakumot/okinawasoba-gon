@@ -1,0 +1,322 @@
+$main-color: #ffffff;
+$accent-color: #E83827;
+$base-coloer: #2b2b2b;
+$font-normal: 16px;
+$font-midle: 20px;
+$font-large: 30px;
+$font-extra-large: 50px;
+
+// ----------------------------------------
+//ミックスイン
+//----------------------------------------
+// 横並び
+@mixin row() {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+@mixin center() {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+
+
+/*==================================================
+スライダーのためのcss
+===================================*/
+.slider {
+  /*横幅94%で左右に余白を持たせて中央寄せ*/
+  margin: 0 auto;
+}
+
+.slider img {
+  /*スライダー内の画像を横幅100%に*/
+  height: 100vh;
+}
+
+
+/*========= ナビゲーションのためのCSS ===============*/
+
+#g-nav {
+  /*position:fixed;にし、z-indexの数値を大きくして前面へ*/
+  z-index: 999;
+  position: fixed;
+  /*ナビのスタート位置と形状*/
+  top: 0;
+  right: -120%;
+  width: 20%;
+  height: 100vh;
+  /*ナビの高さ*/
+  background: $base-coloer;
+  /*動き*/
+  transition: all 0.6s;
+}
+
+/*アクティブクラスがついたら位置を0に*/
+#g-nav.panelactive {
+  right: 0;
+}
+
+
+/*ナビゲーション*/
+#g-nav ul {
+  /*ナビゲーション天地中央揃え*/
+  position: absolute;
+  z-index: 999;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/*リストのレイアウト設定*/
+
+#g-nav li {
+  list-style: none;
+  text-align: center;
+}
+
+#g-nav li a {
+  color: $main-color;
+  text-decoration: none;
+  padding: 10px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: bold;
+}
+
+/*========= ボタンのためのCSS ===============*/
+.openbtn {
+  z-index: 9999;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  position: relative;
+}
+
+/*×に変化*/
+.openbtn span {
+  display: inline-block;
+  transition: all .4s;
+  position: absolute;
+  left: 14px;
+  height: 3px;
+  border-radius: 2px;
+  background-color: gray;
+  width: 45%;
+}
+
+.openbtn span:nth-of-type(1) {
+  top: 15px;
+}
+
+.openbtn span:nth-of-type(2) {
+  top: 23px;
+}
+
+.openbtn span:nth-of-type(3) {
+  top: 31px;
+}
+
+.openbtn.active span:nth-of-type(1) {
+  top: 18px;
+  left: 18px;
+  transform: translateY(6px) rotate(-45deg);
+  width: 30%;
+}
+
+.openbtn.active span:nth-of-type(2) {
+  opacity: 0;
+}
+
+.openbtn.active span:nth-of-type(3) {
+  top: 30px;
+  left: 18px;
+  transform: translateY(-6px) rotate(45deg);
+  width: 30%;
+}
+
+/*========= 流れるテキスト ===============*/
+
+/*全共通*/
+
+.slide-in {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.slide-in_inner {
+  display: inline-block;
+
+}
+
+/* 上下のアニメーション*/
+.downAnime {
+  opacity: 0;
+  /* 事前に透過0 にして消しておく*/
+}
+
+.slideAnimeDownUp {
+  animation-name: slideTextY100;
+  animation-duration: 0.8s;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+
+@keyframes slideTextY100 {
+  from {
+    transform: translateY(100%);
+    /* 要素を上の枠外に移動*/
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    /* 要素を元の位置に移動*/
+    opacity: 1;
+  }
+}
+
+.slideAnimeUpDown {
+  animation-name: slideTextY-100;
+  animation-duration: 0.8s;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+
+@keyframes slideTextY-100 {
+  from {
+    transform: translateY(-100%);
+    /* 要素を下の枠外に移動*/
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    /* 要素を元の位置に移動*/
+    opacity: 1;
+  }
+}
+
+/*全共通*/
+
+.bgextend {
+  animation-name: bgextendAnimeBase;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  position: relative;
+  overflow: hidden;
+  /*　はみ出た色要素を隠す　*/
+  opacity: 0;
+}
+
+@keyframes bgextendAnimeBase {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/*中の要素*/
+.bgappear {
+  animation-name: bgextendAnimeSecond;
+  animation-duration: 1s;
+  animation-delay: 0.6s;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+
+@keyframes bgextendAnimeSecond {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+
+/*上から下*/
+.bgUDextend::before {
+  animation-name: bgUDextendAnime;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #666;
+  /*伸びる背景色の設定*/
+}
+
+@keyframes bgUDextendAnime {
+  0% {
+    transform-origin: top;
+    transform: scaleY(0);
+  }
+
+  50% {
+    transform-origin: top;
+    transform: scaleY(1);
+  }
+
+  50.001% {
+    transform-origin: bottom;
+  }
+
+  100% {
+    transform-origin: bottom;
+    transform: scaleY(0);
+  }
+}
+
+/* スクロールをしたら出現する要素にはじめに透過0を指定　*/
+.bgappearTrigger,
+.bgUDextendTrigger {
+  opacity: 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////
+
+.slider img {
+  /* じわっと画像が表示される */
+  animation: fadeIn 5s ease 0s 1 normal;
+  -webkit-animation: fadeIn 5s ease 0s 1 normal;
+}
+
+/* じわっと画像が表示される ---------　一度追加していたら不要*/
+@keyframes fadeIn {
+
+  /*上のbody内で呼び出しているアニメーションと名前をそろえる*/
+  0% {
+    opacity: 0
+  }
+
+  /* 始め */
+  100% {
+    opacity: 1
+  }
+
+  /* 終わり */
+}
+
+/*古いブラウザ用　---------　一度追加していたら不要*/
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0
+  }
+
+  100% {
+    opacity: 1
+  }
+}
